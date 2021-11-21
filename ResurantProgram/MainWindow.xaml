@@ -52,7 +52,8 @@
                 <materialDesign:Badged x:Name="cartBadge" HorizontalAlignment="Center" Badge="3" Grid.Column="1" 
                                        BadgeBackground="#5CFF42" BadgeForeground="#000">
                     <Button IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Background="#786CFF" BorderBrush="Transparent" materialDesign:ButtonAssist.CornerRadius="5">
+                            Background="#786CFF" BorderBrush="Transparent" materialDesign:ButtonAssist.CornerRadius="5"
+                            Click="ShowCart">
                         <materialDesign:PackIcon Kind="Cart" Foreground="#fff"/>
                     </Button>
                 </materialDesign:Badged>

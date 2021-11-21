@@ -1,0 +1,90 @@
+﻿<Window x:Class="ResturantProgram.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:uc="clr-namespace:ResturantProgram.User_Controlls"
+        xmlns:local="clr-namespace:ResurantProgram"
+        mc:Ignorable="d"
+        Title="OrderWindow" Height="550" Width="768" FontFamily="vazir fd" WindowStyle="None"
+        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+    <Border Background="#fff" CornerRadius="16">
+        <Grid Margin="16 5 16 16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="grayPanel" Grid.RowSpan="4" Background="#000" Panel.ZIndex="5" Opacity="0.5" Visibility="Collapsed"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Background="Transparent" BorderThickness="0" Cursor="SizeAll" PreviewMouseLeftButtonDown="MoveWindow"/>
+                <Button Grid.Column="1" Style="{StaticResource MaterialDesignIconButton}"  Foreground="#000"
+                        Height="20" Width="20"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="MinimizeWindow">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Height="12" Width="12"/>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource MaterialDesignIconButton}" Foreground="#000"
+                        Height="20" Width="20"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="CloseWindow">
+                    <materialDesign:PackIcon Kind="Close" Height="12" Width="12" />
+                </Button>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" FlowDirection="RightToLeft">
+                <TextBlock x:Name="userName" Text="سجاد میرشبی" FontSize="20" />
+                <Grid>
+                    <TextBlock Text="آدرس شما:" VerticalAlignment="Center" FontSize="16" Opacity="0.5"/>
+                    <Button Style="{StaticResource MaterialDesignIconButton}" ToolTip="MaterialDesignIconButton" HorizontalAlignment="Right" 
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Foreground="#279600" Click="EditAddress">
+                        <materialDesign:PackIcon Kind="Edit" />
+                    </Button>
+                </Grid>
+                <TextBlock x:Name="address" 
+                           Text="آدرس کاربر در اینجا قرار میگیرد آدرس کاربر در اینجا قرار میگیرد آدرس کاربر در اینجا قرار میگیرد آدرس کاربر در اینجا قرار میگیرد آدرس کاربر در اینجا قرار میگیرد آدرس کاربر در اینجا قرار میگیرد" FontSize="16" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <Border CornerRadius="16" BorderThickness="2" BorderBrush="#786CFF" Grid.Row="2" Margin="8 16">
+                <ScrollViewer FlowDirection="RightToLeft">
+                    <StackPanel Orientation="Vertical">
+                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="20000" FoodCount="2"/>
+                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="10000" FoodCount="1"/>
+                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="5000" FoodCount="3"/>
+                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="15000" FoodCount="2"/>
+                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="2000" FoodCount="5"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Separator Height="2" Grid.Row="3" Background="#000" Opacity="0.5" />
+
+            <Grid Grid.Row="4" FlowDirection="RightToLeft" Margin="50 0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="جمع کل سفارشات:" FontSize="16" />
+                    <TextBlock Margin="16 0">
+                        <Run x:Name="totalPrice" FontSize="20" Text="160,000" />
+                        <Run FontSize="14" Text="تومان" />
+                    </TextBlock>
+                </StackPanel>
+
+                <Button Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="300" Height="50" HorizontalAlignment="Right"
+                        Content="ثبت سفارش و پرداخت" materialDesign:ButtonAssist.CornerRadius="8" Background="#22B54B" Foreground="#fff"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
+                        BorderThickness="0" Click="SubmitAndPayOrder" />
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>

@@ -1,5 +1,4 @@
-﻿using ResturantProgram;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ResurantProgram
+namespace ResturantProgram
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for OrderWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class OrderWindow : Window
     {
-        public MainWindow()
+        public OrderWindow()
         {
             InitializeComponent();
         }
@@ -33,7 +31,7 @@ namespace ResurantProgram
 
         private void MinimizeWindow(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;   
+            this.WindowState = WindowState.Minimized;
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
@@ -41,29 +39,19 @@ namespace ResurantProgram
             this.Close();
         }
 
-        private void AddToCart(object sender, ResturantProgram.User_Controlls.FoodCard e)
+        private void EditAddress(object sender, RoutedEventArgs e)
         {
-            var count = int.Parse(cartBadge.Badge.ToString());
-            cartBadge.Badge = count + 1;
-        }
-
-        private void Login(object sender, RoutedEventArgs e)
-        {
-            //LoginWindow loginWindow = new LoginWindow();
             UserAddressWindow addressWindow = new UserAddressWindow();
+            addressWindow.addressInput.Text = address.Text;
             grayPanel.Visibility = Visibility.Visible;
             addressWindow.ShowDialog();
 
             grayPanel.Visibility = Visibility.Collapsed;
         }
 
-        private void ShowCart(object sender, RoutedEventArgs e)
+        private void SubmitAndPayOrder(object sender, RoutedEventArgs e)
         {
-            OrderWindow orderWindow = new OrderWindow();
-            grayPanel.Visibility = Visibility.Visible;
-            orderWindow.ShowDialog();
 
-            grayPanel.Visibility = Visibility.Collapsed;
         }
     }
 }

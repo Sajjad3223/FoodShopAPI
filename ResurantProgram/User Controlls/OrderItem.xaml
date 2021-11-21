@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="ResturantProgram.User_Controlls.OrderItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:ResturantProgram.User_Controlls"
+             mc:Ignorable="d" x:Name="this"
+             Height="70" Width="700" FontFamily="Vazir FD" Loaded="this_Loaded">
+    <UserControl.Resources>
+        <BitmapImage x:Key="DefaultImage" UriSource="/ResturantProgram;component/Images/pizza.png" />
+    </UserControl.Resources>
+    <Grid FlowDirection="RightToLeft">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding Image,ElementName=this,FallbackValue={StaticResource DefaultImage},TargetNullValue={StaticResource DefaultImage}}" Margin="8 4" MinWidth="100" MaxWidth="150"/>
+            <TextBlock Grid.Column="1" Text="{Binding FoodName,ElementName=this,FallbackValue=نام غذا}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+            
+            <StackPanel Orientation="Vertical" Grid.Column="2" VerticalAlignment="Center">
+                <TextBlock Text="تعداد:" HorizontalAlignment="Center" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Grid.Column="0" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="20" Height="20"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="DecreaseCount">
+                        <materialDesign:PackIcon Kind="Minus" Height="16" Width="16" />
+                    </Button>
+
+                    <TextBox Grid.Column="1" x:Name="foodCount" Text="{Binding FoodCount , ElementName=this,Mode=TwoWay,FallbackValue=1,TargetNullValue=1}"
+                             materialDesign:HintAssist.Hint="تعداد" Margin="10 0" FlowDirection="RightToLeft" TextAlignment="Center"
+                         PreviewTextInput="HandleInput" >
+                    </TextBox>
+
+                    <Button Grid.Column="2" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Width="20" Height="20"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="IncreaseCount">
+                        <materialDesign:PackIcon Kind="Plus" Height="16" Width="16" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical" Grid.Column="3" VerticalAlignment="Center">
+                <TextBlock Text="قیمت:" HorizontalAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center">
+                    <Run x:Name="unitPrice" Text="{Binding FoodPrice,ElementName=this,StringFormat=N0}" FontSize="16"/>
+                    <Run Text="تومان" FontSize="12" />
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="4" VerticalAlignment="Center">
+                <TextBlock Text="قیمت:" HorizontalAlignment="Center" />
+                <TextBlock HorizontalAlignment="Center">
+                    <Run x:Name="totalPrice" Text="{Binding TotalPrice,ElementName=this,StringFormat=N0}" FontSize="16"/>
+                    <Run Text="تومان" FontSize="12" />
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+        <Button Grid.Column="1" Style="{StaticResource MaterialDesignIconButton}" ToolTip="حذف کالا از سبد خرید" 
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                Foreground="Red" Click="DeleteItem">
+            <materialDesign:PackIcon Kind="Delete" />
+        </Button>
+    </Grid>
+</UserControl>
