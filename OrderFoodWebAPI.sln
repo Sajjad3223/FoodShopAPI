@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderFoodWebAPI", "OrderFoodWebAPI\OrderFoodWebAPI.csproj", "{1BBE1D79-DA19-4513-B0E8-8F975494E89A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{971DBC29-AAD4-429C-9C93-9496FDB9710A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{971DBC29-AAD4-429C-9C93-9496FDB9710A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResturantProgram", "ResurantProgram\ResturantProgram.csproj", "{C2A7F20A-AD2D-4832-835A-262B2FEEFE29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{971DBC29-AAD4-429C-9C93-9496FDB9710A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{971DBC29-AAD4-429C-9C93-9496FDB9710A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{971DBC29-AAD4-429C-9C93-9496FDB9710A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2A7F20A-AD2D-4832-835A-262B2FEEFE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2A7F20A-AD2D-4832-835A-262B2FEEFE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2A7F20A-AD2D-4832-835A-262B2FEEFE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2A7F20A-AD2D-4832-835A-262B2FEEFE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

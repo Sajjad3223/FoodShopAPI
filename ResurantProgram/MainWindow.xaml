@@ -1,0 +1,96 @@
+﻿<Window x:Class="ResurantProgram.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:uc="clr-namespace:ResturantProgram.User_Controlls"
+        xmlns:local="clr-namespace:ResurantProgram"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="768" FontFamily="vazir fd" WindowStyle="None"
+        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+    <Border Background="#fff" CornerRadius="16">
+        <Grid Margin="16 5 16 16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="grayPanel" Grid.RowSpan="4" Background="#000" Panel.ZIndex="5" Opacity="0.5" Visibility="Collapsed"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Background="Transparent" BorderThickness="0" Cursor="SizeAll" PreviewMouseLeftButtonDown="MoveWindow"/>
+                <Button Grid.Column="1" Style="{StaticResource MaterialDesignIconButton}"  Foreground="#000"
+                        Height="20" Width="20"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="MinimizeWindow">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Height="12" Width="12"/>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource MaterialDesignIconButton}" Foreground="#000"
+                        Height="20" Width="20"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Click="CloseWindow">
+                    <materialDesign:PackIcon Kind="Close" Height="12" Width="12" />
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1" Margin="16 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#000" Content="ورود به حساب کاربری" Click="Login"/>
+
+                <materialDesign:Badged x:Name="cartBadge" HorizontalAlignment="Center" Badge="3" Grid.Column="1" 
+                                       BadgeBackground="#5CFF42" BadgeForeground="#000">
+                    <Button IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Background="#786CFF" BorderBrush="Transparent" materialDesign:ButtonAssist.CornerRadius="5">
+                        <materialDesign:PackIcon Kind="Cart" Foreground="#fff"/>
+                    </Button>
+                </materialDesign:Badged>
+
+                <TextBox Grid.Column="2" 
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="10 0 0 0" FontSize="16"
+                         materialDesign:HintAssist.FloatingScale="0.50"
+                         materialDesign:HintAssist.Hint="نام غذا" FlowDirection="RightToLeft">
+                </TextBox>
+            </Grid>
+
+
+            <ScrollViewer Grid.Row="2" Margin=" 010">
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <uc:FoodCard FoodId="1" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
+                    <uc:FoodCard FoodId="2" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
+                    <uc:FoodCard FoodId="3" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
+                    <uc:FoodCard FoodId="4" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
+                </WrapPanel>
+            </ScrollViewer>
+
+            <StackPanel x:Name="pagination" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" FlowDirection="RightToLeft">
+                <Button Content="1" Width="30" Height="30"
+  Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                <Button Content="2" Foreground="#000" 
+                        materialDesign:ButtonAssist.CornerRadius="50"
+  Style="{StaticResource MaterialDesignFlatLightButton}" Width="30" Height="30" Padding="0" Margin="5 0"
+  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                <Button Content="3" Foreground="#000" Width="30" Height="30" Padding="0" Margin="5 0"
+                        materialDesign:ButtonAssist.CornerRadius="50"
+  Style="{StaticResource MaterialDesignFlatLightButton}"
+  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                <Button Content="4" Foreground="#000" Width="30" Height="30" Padding="0" Margin="5 0"
+                        materialDesign:ButtonAssist.CornerRadius="50"
+  Style="{StaticResource MaterialDesignFlatLightButton}"
+  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
