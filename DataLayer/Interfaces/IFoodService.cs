@@ -8,6 +8,7 @@ namespace DataLayer.Interfaces
     public interface IFoodService
     {
         Task<List<Food>> GetAllFoods();
+        Task<List<Food>> SearchInFoods(string q);
 
         Task<Food> GetFoodById(int id);
 

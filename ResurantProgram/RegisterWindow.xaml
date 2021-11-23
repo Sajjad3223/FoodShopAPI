@@ -54,7 +54,7 @@
                 <TextBox x:Name="firstName" materialDesign:HintAssist.Hint="نام" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" Margin="5 0" />
                 <TextBox x:Name="lastName" Grid.Column="1" materialDesign:HintAssist.Hint="نام خانوادگی" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" Margin="5 0"/>
                 
-                <TextBox x:Name="phoneNumber" Grid.Row="1" Grid.ColumnSpan="2" MaxLength="14" materialDesign:HintAssist.Hint="شماره تلفن" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" Margin="5 0"/>
+                <TextBox x:Name="phoneNumber" Grid.Row="1" Grid.ColumnSpan="2" MaxLength="11" materialDesign:HintAssist.Hint="شماره تلفن" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" Margin="5 0"/>
                 <TextBox x:Name="email" Grid.Row="2" Grid.ColumnSpan="2" materialDesign:HintAssist.Hint="ایمیل" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" Margin="5 0"/>
 
                 <PasswordBox x:Name="password" Grid.Row="3" Grid.Column="0" materialDesign:HintAssist.Hint="رمز عبور" Margin="5 0"

@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ResturantProgram.User_Controlls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" x:Name="_this"
-             d:DesignWidth="200" Width="200" Height="280" FontFamily="vazir fd">
+             d:DesignWidth="200" Width="200" Height="300" FontFamily="vazir fd">
+    
     <materialDesign:Card UniformCornerRadius="10" Background="#C4C4C4">
         <Grid>
             <Grid.RowDefinitions>
@@ -15,7 +16,20 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+            <Button Style="{StaticResource MaterialDesignFlatAccentBgButton}"
+                    Content="{materialDesign:PackIcon Kind=Edit}" Width="30" Height="30" Padding="0"
+                    HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="8" Margin="8"
+                    Visibility="{Binding UserIsAdmin,ElementName=_this}" Panel.ZIndex="5"
+                    ToolTip="ویرایش این غذا" Click="EditFood"/>
+            <Button Style="{StaticResource MaterialDesignFlatAccentBgButton}"
+                    Content="{materialDesign:PackIcon Kind=Delete}" Width="30" Height="30" Padding="0"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" BorderThickness="0"
+                    materialDesign:ButtonAssist.CornerRadius="8" Margin="8" Background="#ff2233" Foreground="#fff"
+                    Visibility="{Binding UserIsAdmin,ElementName=_this}" Panel.ZIndex="5"
+                    ToolTip="ویرایش این غذا" Click="DeleteFood"/>
             <Image Source="{Binding Image,ElementName=_this}" Height="140" Stretch="UniformToFill" />
             <StackPanel Grid.Row="1" Margin="0 5">
                 <TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" 
@@ -46,13 +60,18 @@
                     <materialDesign:PackIcon Kind="Plus" Height="16" Width="16" />
                 </Button>
             </Grid>
-            <StackPanel Grid.Row="4">
+            <TextBlock Grid.Row="4" HorizontalAlignment="Center">
+                <Run Text="قیمت: "/>
+                <Run Text="{Binding FoodPrice,ElementName=_this,StringFormat=N0 , FallbackValue=15000}" FontSize="16" />
+            </TextBlock>
+            <StackPanel Grid.Row="5">
                 <Button Style="{StaticResource MaterialDesignFlatAccentBgButton}" Margin="10" Background="#4F6DD9" Foreground="#fff"
                                         Height="40"  BorderThickness="0" materialDesign:ButtonAssist.CornerRadius="8"
                             ToolTip="افزودن این غذا به سبد خرید شما" 
                             Content="افزودن به سبد خرید" 
                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
                         Click="AddToCart"/>
+                
             </StackPanel>
         </Grid>
     </materialDesign:Card>

@@ -75,5 +75,10 @@ namespace DataLayer.Services
             var food = await GetFoodById(id);
             return await DeleteFood(food);
         }
+
+        public Task<List<Food>> SearchInFoods(string q)
+        {
+            return _context.Foods.Where(f => f.FoodName.Contains(q)).ToListAsync();
+        }
     }
 }

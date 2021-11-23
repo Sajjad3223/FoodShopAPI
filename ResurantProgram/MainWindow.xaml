@@ -8,7 +8,8 @@
         xmlns:local="clr-namespace:ResurantProgram"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="768" FontFamily="vazir fd" WindowStyle="None"
-        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
+        Loaded="GetFoodsAsync">
     <Border Background="#fff" CornerRadius="16">
         <Grid Margin="16 5 16 16">
             <Grid.RowDefinitions>
@@ -26,15 +27,16 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Button Background="Transparent" BorderThickness="0" Cursor="SizeAll" PreviewMouseLeftButtonDown="MoveWindow"/>
+                <Button Background="Transparent" BorderThickness="0" Cursor="SizeAll" Grid.ColumnSpan="3" PreviewMouseLeftButtonDown="MoveWindow"
+                        Panel.ZIndex="1"/>
                 <Button Grid.Column="1" Style="{StaticResource MaterialDesignIconButton}"  Foreground="#000"
-                        Height="20" Width="20"
+                        Height="20" Width="20" Panel.ZIndex="2"
                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                         Click="MinimizeWindow">
                     <materialDesign:PackIcon Kind="WindowMinimize" Height="12" Width="12"/>
                 </Button>
                 <Button Grid.Column="2" Style="{StaticResource MaterialDesignIconButton}" Foreground="#000"
-                        Height="20" Width="20"
+                        Height="20" Width="20" Panel.ZIndex="2"
                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                         Click="CloseWindow">
                     <materialDesign:PackIcon Kind="Close" Height="12" Width="12" />
@@ -44,12 +46,14 @@
             <Grid Grid.Row="1" Margin="16 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#000" Content="ورود به حساب کاربری" Click="Login"/>
+                <Button x:Name="loginBtn" Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#000" Content="ورود به حساب کاربری" Click="Login"/>
+                <Button x:Name="addressEdit" Style="{StaticResource MaterialDesignFlatAccentButton}" Foreground="#000" Content="ثبت و ویرایش آدرس" Click="EditAddress" Visibility="Collapsed"/>
 
-                <materialDesign:Badged x:Name="cartBadge" HorizontalAlignment="Center" Badge="3" Grid.Column="1" 
+                <materialDesign:Badged x:Name="cartBadge" HorizontalAlignment="Center" Badge="0" Grid.Column="2" 
                                        BadgeBackground="#5CFF42" BadgeForeground="#000">
                     <Button IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                             Background="#786CFF" BorderBrush="Transparent" materialDesign:ButtonAssist.CornerRadius="5"
@@ -58,20 +62,29 @@
                     </Button>
                 </materialDesign:Badged>
 
-                <TextBox Grid.Column="2" 
+                <Button Grid.Column="1" x:Name="AddFoodBtn" Visibility="Collapsed"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                        Background="Goldenrod" BorderBrush="Transparent" materialDesign:ButtonAssist.CornerRadius="5"
+                        Click="AddFood">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="افزودن غذا" />
+                            <materialDesign:PackIcon Kind="Plus" Foreground="#fff" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <TextBox Grid.Column="3" 
                          materialDesign:TextFieldAssist.TextBoxViewMargin="10 0 0 0" FontSize="16"
                          materialDesign:HintAssist.FloatingScale="0.50"
-                         materialDesign:HintAssist.Hint="نام غذا" FlowDirection="RightToLeft">
+                         materialDesign:HintAssist.Hint="نام غذا" FlowDirection="RightToLeft"
+                         TextChanged="SearchFood" x:Name="searchBox">
                 </TextBox>
             </Grid>
 
 
             <ScrollViewer Grid.Row="2" Margin=" 010">
-                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                    <uc:FoodCard FoodId="1" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
-                    <uc:FoodCard FoodId="2" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
-                    <uc:FoodCard FoodId="3" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
-                    <uc:FoodCard FoodId="4" FoodName="پیتزای به به" Margin="10" OnFoodAddedToCart="AddToCart"/>
+                <WrapPanel x:Name="foodsPanel" Orientation="Horizontal" HorizontalAlignment="Center" >
                 </WrapPanel>
             </ScrollViewer>
 

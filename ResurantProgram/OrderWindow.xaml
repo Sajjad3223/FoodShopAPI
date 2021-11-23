@@ -59,11 +59,11 @@
             <Border CornerRadius="16" BorderThickness="2" BorderBrush="#786CFF" Grid.Row="2" Margin="8 16">
                 <ScrollViewer FlowDirection="RightToLeft">
                     <StackPanel Orientation="Vertical">
-                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="20000" FoodCount="2"/>
-                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="10000" FoodCount="1"/>
-                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="5000" FoodCount="3"/>
-                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="15000" FoodCount="2"/>
-                        <uc:OrderItem Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="2000" FoodCount="5"/>
+                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="20000" FoodCount="2"/>
+                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="10000" FoodCount="1"/>
+                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="5000" FoodCount="3"/>
+                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="15000" FoodCount="2"/>
+                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="2000" FoodCount="5"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

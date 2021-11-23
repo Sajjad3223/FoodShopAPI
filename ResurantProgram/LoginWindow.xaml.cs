@@ -1,19 +1,13 @@
 ﻿using DataLayer.DTOs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ResturantProgram
 {
@@ -23,7 +17,7 @@ namespace ResturantProgram
     public partial class LoginWindow : Window
     {
 
-        private const string API_URL = "https://localhost:4050/";
+        public event EventHandler OnLoginSucceeded;
 
         public LoginWindow()
         {
@@ -48,11 +42,16 @@ namespace ResturantProgram
         private void Register(object sender, RoutedEventArgs e)
         {
             RegisterWindow registerWindow = new RegisterWindow();
-            registerWindow.Show();
-            Close();
+            registerWindow.OnRegistered += (s, user) =>
+            {
+                email.Text = user.Email;
+                password.Password = user.Password;
+            };
+
+            registerWindow.ShowDialog();
         }
 
-        private void Login(object sender, RoutedEventArgs e)
+        private async void Login(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(email.Text) || string.IsNullOrWhiteSpace(password.Password))
             {
@@ -65,20 +64,30 @@ namespace ResturantProgram
             loginDTO.Email = email.Text;
             loginDTO.Password = password.Password;
 
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
 
-            var values = new Dictionary<string, string>
-                {
-                    { nameof(loginDTO.Email), loginDTO.Email },
-                    { nameof(loginDTO.Password), loginDTO.Password }
-                };
+            string json = JsonConvert.SerializeObject(loginDTO);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var content = new FormUrlEncodedContent(values);
 
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", "Your Oauth token");
+            var result = await client.PostAsync($"{Informations.API_URL}/Account/login", content);
 
-            client.PostAsync($"{API_URL}/account/login", content);
+            if (result.IsSuccessStatusCode)
+            {
+                string contents = await result.Content.ReadAsStringAsync();
+                var token = JsonConvert.DeserializeObject<AuthorizationToken>(contents);
+                Informations.Token = token.Token;
+                OnLoginSucceeded?.Invoke(this, null);
+                MessageBox.Show("ورود با موفقیت انجام شد");
+                Close();
+            }
         }
+
+
+    }
+
+    public class AuthorizationToken
+    {
+        public string Token { get; set; }
     }
 }

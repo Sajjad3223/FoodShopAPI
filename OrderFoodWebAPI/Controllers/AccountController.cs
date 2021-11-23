@@ -9,6 +9,8 @@ using DataLayer.DTOs;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using OrderFoodWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace OrderFoodWebAPI.Controllers
 {
@@ -83,7 +85,7 @@ namespace OrderFoodWebAPI.Controllers
                 {
                     return Unauthorized(loginDto);
                 }
-
+                
                 return Accepted(new {Token = await _authManager.CreateToken()});
             } 
             catch (Exception e)
@@ -92,5 +94,33 @@ namespace OrderFoodWebAPI.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            ApiUser user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Name).Value);
+
+            var userDto = _mapper.Map<UserDTO>(user);
+
+            userDto.Roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(userDto);
+        }
+    
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody]UpdateUserDTO userDto)
+        {
+            ApiUser user = await _userManager.FindByEmailAsync(userDto.Email);
+
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Address = userDto.Address;
+
+            await _userManager.UpdateAsync(user);
+
+            return Ok();
+        }
     }
 }

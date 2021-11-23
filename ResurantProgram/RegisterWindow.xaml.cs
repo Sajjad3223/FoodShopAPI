@@ -1,4 +1,5 @@
 ﻿using DataLayer.DTOs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace ResturantProgram
     /// </summary>
     public partial class RegisterWindow : Window
     {
-        private const string API_URL = "https://localhost:4050/";
+        public event EventHandler<UserDTO> OnRegistered;
 
         public RegisterWindow()
         {
@@ -43,7 +44,7 @@ namespace ResturantProgram
             this.Close();
         }
 
-        private void Register(object sender, RoutedEventArgs e)
+        private async void Register(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(firstName.Text) || string.IsNullOrWhiteSpace(lastName.Text) || string.IsNullOrWhiteSpace(email.Text) ||
                 string.IsNullOrWhiteSpace(phoneNumber.Text) || string.IsNullOrWhiteSpace(password.Password) || string.IsNullOrWhiteSpace(confirmedPassword.Password))
@@ -64,20 +65,25 @@ namespace ResturantProgram
             user.PhoneNumber = phoneNumber.Text;
             user.Email = email.Text;
             user.Password = password.Password;
+            user.Roles = new List<string> { "User" };
 
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
 
-            var values = new Dictionary<string, string>
-                {
-                    { nameof(user.FirstName), user.FirstName },
-                    { nameof(user.LastName), user.LastName },
-                    { nameof(user.PhoneNumber), user.PhoneNumber },
-                    { nameof(user.Email), user.Email },
-                    { nameof(user.Password), user.Password }
-                };
+            string json = JsonConvert.SerializeObject(user);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var content = new FormUrlEncodedContent(values);
-            client.PostAsync($"{API_URL}/account/register", content);
+            var result = await client.PostAsync($"{Informations.API_URL}/Account/register", content);
+
+            if (result.IsSuccessStatusCode)
+            {
+                MessageBox.Show("حساب شما با موفقیت ساخته شد \n حالا می توانید وارد حساب خود شوید.");
+                OnRegistered?.Invoke(this, user);
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(await result.Content.ReadAsStringAsync());
+            }
         }
 
         private void Login(object sender, RoutedEventArgs e)
