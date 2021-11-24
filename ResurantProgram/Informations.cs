@@ -16,11 +16,11 @@ namespace ResturantProgram
             Admin
         }
 
-        public const string API_URL = "https://localhost:44317/api";
-        //public const string API_URL = "https://localhost:5001/api";
+        public const string DOMAIN = "https://localhost:44317";
 
-        public const string FOODS_IMAGE_PATH = "https://localhost:44317/images/";
-        //public const string FOODS_IMAGE_PATH = "https://localhost:5001/images/";
+        public static string API_URL = $"{DOMAIN}/api";
+
+        public static string FOODS_IMAGE_PATH = $"{DOMAIN}/images/";
 
         public static string Token = string.Empty;
 

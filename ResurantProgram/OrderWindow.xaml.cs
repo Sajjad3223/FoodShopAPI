@@ -56,7 +56,7 @@ namespace ResturantProgram
         {
             try
             {
-                string payUrl = $"https://localhost:44317/Payment/PayOrder?orderId={_orderId}";
+                string payUrl = $"{Informations.DOMAIN}/Payment/PayOrder?orderId={_orderId}";
                 Process.Start(new ProcessStartInfo()
                 {
                     FileName = payUrl,
