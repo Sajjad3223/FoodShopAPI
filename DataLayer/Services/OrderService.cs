@@ -29,12 +29,12 @@ namespace DataLayer.Services
 
         public Task<Order> GetOrderByUserId(string userId)
         {
-            return _context.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.UserId == userId);
+            return _context.Orders.AsNoTracking().Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.UserId == userId);
         }
 
         public Task<Order> GetUserOpenOrder(string userId)
         {
-            return _context.Orders.AsNoTracking().FirstOrDefaultAsync(o => o.UserId == userId && !o.IsPaid);
+            return _context.Orders.AsNoTracking().Include(o => o.OrderItems).FirstOrDefaultAsync(o => o.UserId == userId && !o.IsPaid);
         }
 
         public async Task<bool> InsertOrder(Order order)

@@ -43,7 +43,7 @@ namespace OrderFoodWebAPI.Controllers
                 var orderDto = _mapper.Map<OrderDTO>(order);
                 var items = await _orderItemService.GetOrderItemsByOrderId(orderId);
                 orderDto.OrderItems = _mapper.Map<List<OrderItemDTO>>(items);
-                orderDto.TotalPrice = items.Sum(i => i.Price * i.Count);
+                orderDto.TotalPrice = order.OrderItems.Sum(i => i.Count * i.Price);
 
                 return Ok(orderDto);
             }
@@ -51,6 +51,15 @@ namespace OrderFoodWebAPI.Controllers
             {
                 return Problem(e.Message + "   " + e.InnerException?.Message, statusCode: 500);
             }
+        }
+
+        private async void UpdateOrderTotalPrice(int orderId)
+        {
+            var order = await _orderService.GetOrderById(orderId);
+
+            order.TotalPrice = order.OrderItems.Sum(i => i.Count * i.Price);
+
+            await _orderService.UpdateOrder(order);
         }
 
         [HttpGet]
@@ -67,7 +76,7 @@ namespace OrderFoodWebAPI.Controllers
                 var orderDto = _mapper.Map<OrderDTO>(order);
                 var items = await _orderItemService.GetOrderItemsByOrderId(order.Id);
                 orderDto.OrderItems = _mapper.Map<List<OrderItemDTO>>(items);
-                orderDto.TotalPrice = items.Sum(i => i.Price * i.Count);
+                orderDto.TotalPrice = order.OrderItems.Sum(i => i.Count * i.Price);
 
                 return Ok(orderDto);
             }
@@ -121,8 +130,6 @@ namespace OrderFoodWebAPI.Controllers
 
                     await _orderItemService.InsertOrderItem(orderItem);
                 }
-
-
                 return await GetOrder(order.Id);
             }
             catch (Exception e)
@@ -161,7 +168,7 @@ namespace OrderFoodWebAPI.Controllers
                     return NotFound();
 
                 await _orderItemService.DeleteOrderItem(itemId);
-
+                UpdateOrderTotalPrice(item.OrderId);
                 return NoContent();
             }
             catch (Exception e)

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ResturantProgram.User_Controlls;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,6 +18,8 @@ namespace ResturantProgram
     /// </summary>
     public partial class OrderWindow : Window
     {
+        private int _orderId;
+
         public OrderWindow()
         {
             InitializeComponent();
@@ -51,7 +54,19 @@ namespace ResturantProgram
 
         private void SubmitAndPayOrder(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                string payUrl = $"https://localhost:44317/Payment/PayOrder?orderId={_orderId}";
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = payUrl,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.InnerException.Message);
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -68,6 +83,7 @@ namespace ResturantProgram
                     OrderDTO userOrder = JsonConvert.DeserializeObject<OrderDTO>(await response.Content.ReadAsStringAsync());
                     if (userOrder != null)
                     {
+                        _orderId = userOrder.Id;
                         if (userOrder.OrderItems.Any())
                         {
                             orderItemsPanel.Children.Clear();
