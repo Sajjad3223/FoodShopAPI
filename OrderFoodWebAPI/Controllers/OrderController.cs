@@ -131,6 +131,26 @@ namespace OrderFoodWebAPI.Controllers
             }
         }
         
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrderItem(OrderItemDTO orderItemDto)
+        {
+            try
+            {
+                var item = await _orderItemService.GetOrderItemById(orderItemDto.Id);
+                if (item == null) return NotFound();
+
+                var orderItem = _mapper.Map<OrderItem>(orderItemDto);
+
+                var result = await _orderItemService.UpdateOrderItem(orderItem);
+
+                return Ok();
+            }
+            catch (Exception ex)    
+            {
+                return Problem(statusCode:500);
+            }
+        }
+
         [HttpDelete("{itemId:int}")]
         public async Task<IActionResult> DeleteOrderItem(int itemId)
         {

@@ -1,6 +1,10 @@
-﻿using System;
+﻿using DataLayer.DTOs;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,11 +24,19 @@ namespace ResturantProgram.User_Controlls
     /// </summary>
     public partial class OrderItem : UserControl
     {
-        public event EventHandler<OrderItem> DeleteOrderItem;
+        public event EventHandler<OrderItem> OrderItemUpdated;
 
         public OrderItem()
         {
             InitializeComponent();
+        }
+
+        private int _itemId;
+
+        public int ItemId
+        {
+            get { return _itemId; }
+            set { _itemId = value; }
         }
 
         private int _foodId;
@@ -34,6 +46,15 @@ namespace ResturantProgram.User_Controlls
             get { return _foodId; }
             set { _foodId = value; }
         }
+
+        private int _orderId;
+
+        public int OrderId
+        {
+            get { return _orderId; }
+            set { _orderId = value; }
+        }
+
 
         public int FoodCount
         {
@@ -111,6 +132,7 @@ namespace ResturantProgram.User_Controlls
             FoodCount++;
             foodCount.Text = FoodCount.ToString();
             totalPrice.Text = (FoodPrice * FoodCount).ToString("N0");
+            UpdateOrderItem();
         }
 
         private void DecreaseCount(object sender, RoutedEventArgs e)
@@ -120,11 +142,52 @@ namespace ResturantProgram.User_Controlls
             FoodCount--;
             foodCount.Text = FoodCount.ToString();
             totalPrice.Text = (FoodPrice * FoodCount).ToString("N0");
+            UpdateOrderItem();
         }
 
-        private void DeleteItem(object sender, RoutedEventArgs e)
+        private async void UpdateOrderItem()
         {
-            DeleteOrderItem?.Invoke(this, this);
+            using HttpClient client = new HttpClient();
+
+            OrderItemDTO itemDTO = new OrderItemDTO()
+            {
+                Id = ItemId,
+                Count = GetCount(),
+                Price = FoodPrice,
+                FoodId = FoodId,
+                OrderId = OrderId
+            };
+
+            string json = JsonConvert.SerializeObject(itemDTO);
+            HttpContent content = new StringContent(json,Encoding.UTF8,"application/json");
+
+            string actionUrl = $"{Informations.API_URL}/Order";
+
+            client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", Informations.Token);
+
+            var response = await client.PutAsync(actionUrl,content);
+
+            if (response.IsSuccessStatusCode)
+                OrderItemUpdated?.Invoke(this, this);
+        }
+
+        private async void DeleteItem(object sender, RoutedEventArgs e)
+        {
+            using HttpClient client = new HttpClient();
+
+            string actionUrl = $"{Informations.API_URL}/Order/{ItemId}";
+
+            client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", Informations.Token);
+
+            var response = await client.DeleteAsync(actionUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Visibility = Visibility.Hidden;
+                OrderItemUpdated?.Invoke(this,this);
+            }
         }
 
         private void this_Loaded(object sender, RoutedEventArgs e)

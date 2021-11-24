@@ -25,7 +25,9 @@ namespace OrderFoodWebAPI.Controllers
             _foodService = foodService;
             _mapper = mapper;
         }
-        
+
+        #region Get All Foods
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -43,8 +45,13 @@ namespace OrderFoodWebAPI.Controllers
                 return StatusCode(500, "مشکلی در بارگیری غذا ها پیش آمده است!");
             }
         }
-        
-        [HttpGet("{id:int}" , Name = "GetFood")]
+
+
+        #endregion
+
+        #region Get Food By Id
+
+        [HttpGet("{id:int}", Name = "GetFood")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetFood(int id)
@@ -61,6 +68,10 @@ namespace OrderFoodWebAPI.Controllers
                 return StatusCode(500, "مشکلی در بارگیری غذا پیش آمده است!");
             }
         }
+
+        #endregion
+
+        #region Search Foods
 
         [HttpGet("search/{q}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -80,6 +91,10 @@ namespace OrderFoodWebAPI.Controllers
             }
         }
 
+        #endregion
+
+        #region Create Food
+
         [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -95,13 +110,18 @@ namespace OrderFoodWebAPI.Controllers
                 var food = _mapper.Map<Food>(foodDto);
                 await _foodService.InsertFood(food);
 
-                return CreatedAtRoute("GetFood", new {id = food.Id}, food);
+                return CreatedAtRoute("GetFood", new { id = food.Id }, food);
             }
             catch (Exception e)
             {
                 return Problem(e.Message + "   " + e.InnerException?.Message, statusCode: 500);
             }
         }
+
+
+        #endregion
+
+        #region Upload Food Image
 
         [HttpPost]
         [Route("UploadImage")]
@@ -115,13 +135,17 @@ namespace OrderFoodWebAPI.Controllers
 
             Console.WriteLine(savePath);
 
-            using (Stream stream = new FileStream(savePath,FileMode.Create))
+            using (Stream stream = new FileStream(savePath, FileMode.Create))
             {
                 image.CopyTo(stream);
             }
 
             return Ok(fileName);
         }
+
+        #endregion
+
+        #region Delete Food Image
 
         [HttpDelete("DeleteImage/{imageName}")]
         public async Task<IActionResult> DeleteImage(string imageName)
@@ -131,6 +155,11 @@ namespace OrderFoodWebAPI.Controllers
 
             return NoContent();
         }
+
+
+        #endregion
+
+        #region Update Food
 
         [Authorize]
         [HttpPut("{id:int}")]
@@ -160,6 +189,11 @@ namespace OrderFoodWebAPI.Controllers
             }
         }
 
+        #endregion
+
+        #region Delete Food
+
+
         [HttpDelete("{foodId}")]
         public async Task<IActionResult> DeleteFood(int foodId)
         {
@@ -176,6 +210,8 @@ namespace OrderFoodWebAPI.Controllers
 
             return NoContent();
         }
+
+        #endregion
     }
 
 }

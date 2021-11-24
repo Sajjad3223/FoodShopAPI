@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="ResturantProgram.User_Controlls.PageButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ResturantProgram.User_Controlls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" x:Name="this"
+             Width="30" Height="30" Padding="0" Margin="5 0" FontFamily="Vazir Fd">
+    <Button Content="{Binding PageNumber,ElementName=this,FallbackValue=1,TargetNullValue=1}" Width="30" Height="30" Padding="0"
+            Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" 
+            materialDesign:ButtonAssist.CornerRadius="50" Click="ChangePageClick"
+            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"/>
+</UserControl>

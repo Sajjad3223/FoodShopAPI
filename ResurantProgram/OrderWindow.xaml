@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:ResurantProgram"
         mc:Ignorable="d"
         Title="OrderWindow" Height="550" Width="768" FontFamily="vazir fd" WindowStyle="None"
-        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen">
+        Background="Transparent" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Border Background="#fff" CornerRadius="16">
         <Grid Margin="16 5 16 16">
             <Grid.RowDefinitions>
@@ -58,12 +58,7 @@
 
             <Border CornerRadius="16" BorderThickness="2" BorderBrush="#786CFF" Grid.Row="2" Margin="8 16">
                 <ScrollViewer FlowDirection="RightToLeft">
-                    <StackPanel Orientation="Vertical">
-                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="20000" FoodCount="2"/>
-                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="10000" FoodCount="1"/>
-                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="5000" FoodCount="3"/>
-                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="15000" FoodCount="2"/>
-                        <uc:OrderItem Image="./images/pizza.png" Margin="0 5" FoodName="پیتزای به بهِ خوشمزه" FoodPrice="2000" FoodCount="5"/>
+                    <StackPanel x:Name="orderItemsPanel" Orientation="Vertical">
                     </StackPanel>
                 </ScrollViewer>
             </Border>

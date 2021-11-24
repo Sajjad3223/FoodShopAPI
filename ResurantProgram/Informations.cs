@@ -20,6 +20,7 @@ namespace ResturantProgram
         //public const string API_URL = "https://localhost:5001/api";
 
         public const string FOODS_IMAGE_PATH = "https://localhost:44317/images/";
+        //public const string FOODS_IMAGE_PATH = "https://localhost:5001/images/";
 
         public static string Token = string.Empty;
 

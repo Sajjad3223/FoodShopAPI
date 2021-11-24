@@ -26,10 +26,19 @@ namespace ResurantProgram
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Properties
+        
+        private int _pageId = 1;
+        private readonly int foodTake = 6;
+
+        #endregion
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        #region Window Manager
 
         private void MoveWindow(object sender, MouseButtonEventArgs e)
         {
@@ -38,7 +47,7 @@ namespace ResurantProgram
 
         private void MinimizeWindow(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;   
+            this.WindowState = WindowState.Minimized;
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
@@ -46,11 +55,73 @@ namespace ResurantProgram
             this.Close();
         }
 
-        private void AddToCart(object sender, ResturantProgram.User_Controlls.FoodCard e)
+        #endregion
+
+        #region Cart Functions
+
+        private async void AddToCart(object sender, ResturantProgram.User_Controlls.FoodCard e)
         {
-            var count = int.Parse(cartBadge.Badge.ToString());
-            cartBadge.Badge = count + 1;
+            if (string.IsNullOrEmpty(Informations.Token))
+            {
+                MessageBox.Show("برای خرید باید وارد حساب خود شوید");
+                Login(null,null);
+                return;
+            }
+
+            using HttpClient client = new HttpClient();
+
+            string actionUrl = $"{Informations.API_URL}/Order/AddToCart/{e.FoodId}/{e.FoodCount}";
+            client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", Informations.Token);
+
+            var response = await client.GetAsync(actionUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                OrderDTO order = JsonConvert.DeserializeObject<OrderDTO>(await response.Content.ReadAsStringAsync()) ?? null;
+                if(order != null)
+                {
+                    cartBadge.Badge = order.OrderItems.Count;
+                }
+            }
         }
+
+        private void ShowCart(object sender, RoutedEventArgs e)
+        {
+            OrderWindow orderWindow = new OrderWindow();
+            Visibility = Visibility.Collapsed;
+            orderWindow.ShowDialog();
+
+            Visibility = Visibility.Visible;
+        }
+
+        private async void ManageCart()
+        {
+            cartBadge.Visibility = Visibility.Visible;
+
+            using HttpClient client = new HttpClient();
+
+            string actionUrl = $"{Informations.API_URL}/Order";
+
+            client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", Informations.Token);
+
+            var response = await client.GetAsync(actionUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                OrderDTO userOrder = JsonConvert.DeserializeObject<OrderDTO>(await response.Content.ReadAsStringAsync());
+                if (userOrder != null)
+                {
+                    if (userOrder.OrderItems.Any())
+                        cartBadge.Badge = userOrder.OrderItems.Count;
+                }
+            }
+        }
+
+        #endregion
+
+        #region User Functions
 
         private void Login(object sender, RoutedEventArgs e)
         {
@@ -60,6 +131,7 @@ namespace ResurantProgram
             {
                 loginBtn.Visibility = Visibility.Collapsed;
                 ManageAuthotiy();
+                ManageCart();
             };
             loginWindow.ShowDialog();
 
@@ -89,33 +161,31 @@ namespace ResurantProgram
                     Informations.User.UserRole = Informations.EUserRole.Admin;
                     AddFoodBtn.Visibility = Visibility.Visible;
                 }
-                else {
+                else
+                {
                     Informations.User.UserRole = Informations.EUserRole.User;
                     AddFoodBtn.Visibility = Visibility.Collapsed;
                 }
-                GetFoodsAsync(null,null);
+                GetFoodsAsync(null, null);
             }
-        }
-
-        private void ShowCart(object sender, RoutedEventArgs e)
-        {
-            OrderWindow orderWindow = new OrderWindow();
-            Visibility = Visibility.Collapsed;
-            orderWindow.ShowDialog();
-
-            Visibility = Visibility.Visible;
         }
 
         private void EditAddress(object sender, RoutedEventArgs e)
         {
             UserAddressWindow addressWindow = new UserAddressWindow();
             grayPanel.Visibility = Visibility.Visible;
-            
+
             addressWindow.ShowDialog();
 
             grayPanel.Visibility = Visibility.Collapsed;
             addressEdit.Content = Informations.User.FullName;
         }
+
+
+        #endregion
+
+        #region Food Functions
+
 
         private void AddFood(object sender, RoutedEventArgs e)
         {
@@ -158,7 +228,8 @@ namespace ResurantProgram
 
         public void FillFoodPanel(string json)
         {
-            var foodDtos = JsonConvert.DeserializeObject<List<FoodDTO>>(json);
+            var allFoodDtos = JsonConvert.DeserializeObject<List<FoodDTO>>(json);
+            var foodDtos = ManagePaginations(allFoodDtos);
             if (foodDtos.Any())
             {
                 foodsPanel.Children.Clear();
@@ -179,13 +250,37 @@ namespace ResurantProgram
 
                     foodsPanel.Children.Add(foodCard);
                 }
-                ManagePaginations(foodDtos);
             }
         }
 
-        private void ManagePaginations(List<FoodDTO> foodDtos)
+        private List<FoodDTO> ManagePaginations(List<FoodDTO> foodDtos)
         {
-            throw new NotImplementedException();
+            int pageCount = Convert.ToInt32(Math.Ceiling(((float)foodDtos.Count / foodTake)));
+            List<FoodDTO> pageFoods = foodDtos.Skip((_pageId - 1) * foodTake).Take(foodTake).ToList();
+            pagination.Children.Clear();
+            for (int i = 1; i < pageCount + 1; i++)
+            {
+                PageButton pageButton = new PageButton();
+
+                if (_pageId != i)
+                    pageButton.Background = Brushes.Transparent;
+
+                pageButton.ChangePage += GoToPage;
+
+                pageButton.PageNumber = i.ToString();
+
+                pagination.Children.Add(pageButton);
+            }
+
+            return pageFoods;
         }
+
+        private void GoToPage(object sender, int pageNumber)
+        {
+            _pageId = pageNumber;
+            SearchFood(null, null);
+        }
+
+        #endregion
     }
 }

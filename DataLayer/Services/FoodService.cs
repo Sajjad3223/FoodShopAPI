@@ -12,7 +12,6 @@ namespace DataLayer.Services
     public class FoodService : IFoodService
     {
         private readonly FoodShopContext _context;
-
         public FoodService(FoodShopContext context)
         {
             _context = context;
@@ -21,6 +20,11 @@ namespace DataLayer.Services
         public Task<List<Food>> GetAllFoods()
         {
             return _context.Foods.ToListAsync();
+        }
+
+        public Task<List<Food>> SearchInFoods(string q)
+        {
+            return _context.Foods.Where(f => f.FoodName.Contains(q)).ToListAsync();
         }
 
         public Task<Food> GetFoodById(int id)
@@ -74,11 +78,6 @@ namespace DataLayer.Services
         {
             var food = await GetFoodById(id);
             return await DeleteFood(food);
-        }
-
-        public Task<List<Food>> SearchInFoods(string q)
-        {
-            return _context.Foods.Where(f => f.FoodName.Contains(q)).ToListAsync();
         }
     }
 }

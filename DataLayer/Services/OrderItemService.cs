@@ -20,17 +20,17 @@ namespace DataLayer.Services
 
         public Task<List<OrderItem>> GetOrderItemsByOrderId(int orderId)
         {
-            return _context.OrderItems.Where(oi=>oi.OrderId == orderId).ToListAsync();
+            return _context.OrderItems.AsNoTracking().Where(oi=>oi.OrderId == orderId).Include(i=>i.Food).ToListAsync();
         }
 
         public Task<OrderItem> GetOrderItemById(int id)
         {
-            return _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == id);
+            return _context.OrderItems.AsNoTracking().FirstOrDefaultAsync(oi => oi.Id == id);
         }
 
         public Task<OrderItem> DoesOrderHasItem(int orderId, int foodId)
         {
-            return _context.OrderItems.FirstOrDefaultAsync(i => i.OrderId == orderId && i.FoodId == foodId);
+            return _context.OrderItems.AsNoTracking().FirstOrDefaultAsync(i => i.OrderId == orderId && i.FoodId == foodId);
         }
 
         public async Task<bool> InsertOrderItem(OrderItem orderItem)
@@ -55,7 +55,7 @@ namespace DataLayer.Services
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
